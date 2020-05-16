@@ -28,9 +28,9 @@ app.use(IF(
 ));
 ```
 
-See TypeScript definition
+See TypeScript declaration
 [async-request-handler.d.ts](https://github.com/kawanet/async-request-handler/blob/master/types/async-request-handler.d.ts)
-for detail.
+for more detail.
 
 ## SEE ALSO
 
