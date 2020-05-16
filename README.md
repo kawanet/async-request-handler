@@ -34,6 +34,7 @@ for more detail.
 
 ## SEE ALSO
 
+- https://github.com/kawanet/async-request-handler
 - https://github.com/kawanet/express-intercept
 
 ## LICENSE

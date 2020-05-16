@@ -19,8 +19,8 @@
   "files": [
     "LICENSE",
     "README.md",
-    "types/async-request-handler.d.ts",
-    "lib/"
+    "lib/",
+    "types/async-request-handler.d.ts"
   ],
   "homepage": "https://github.com/kawanet/async-request-handler#readme",
   "keywords": [
