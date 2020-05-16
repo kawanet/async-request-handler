@@ -2,6 +2,7 @@
 
 Safe async RequestHandler to catch Promise rejection
 
+![Node.js CI](https://github.com/kawanet/async-request-handler/workflows/Node.js%20CI/badge.svg?branch=master)
 [![npm version](https://badge.fury.io/js/async-request-handler.svg)](https://www.npmjs.com/package/async-request-handler)
 
 ## SYNOPSIS
