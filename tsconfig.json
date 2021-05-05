@@ -6,7 +6,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "noImplicitAny": true,
-    "noImplicitReturns": false,
+    "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
