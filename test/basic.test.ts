@@ -2,7 +2,7 @@
 
 import * as express from "express";
 import * as supertest from "supertest";
-import {ASYNC, CATCH, IF} from "../lib/async-request-handler";
+import {ASYNC, CATCH, IF} from "../";
 
 const TITLE = __filename.split("/").pop();
 

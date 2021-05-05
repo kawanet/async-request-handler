@@ -1,6 +1,6 @@
 // async-handler.ts
 
-import {ErrorRequestHandler, Request, RequestHandler} from "express";
+import type {ErrorRequestHandler, Request, RequestHandler} from "express";
 
 const NOP: RequestHandler = (req, res, next) => next();
 const ENOP: ErrorRequestHandler = (err, req, res, next) => next();
