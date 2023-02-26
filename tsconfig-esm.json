@@ -1,19 +1,18 @@
 {
   "include": [
-    "./lib",
-    "./test"
+    "./lib"
   ],
   "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "Node16",
+    "module": "ES2022",
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
+    "outDir": "esm/",
     "removeComments": false,
     "skipLibCheck": true,
     "strictNullChecks": false,
-    "target": "ES2020"
+    "target": "ES2022"
   }
 }

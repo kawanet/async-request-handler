@@ -16,9 +16,14 @@
     "supertest": "^6.3.3",
     "typescript": "^4.9.5"
   },
+  "exports": {
+    "require": "./lib/async-request-handler.js",
+    "import": "./esm/async-request-handler.mjs"
+  },
   "files": [
     "LICENSE",
     "README.md",
+    "esm/*.mjs",
     "lib/*.js",
     "types/*.d.ts"
   ],
@@ -36,11 +41,10 @@
     "url": "git+https://github.com/kawanet/async-request-handler.git"
   },
   "scripts": {
-    "build": "./node_modules/.bin/tsc -p .",
+    "build": "make",
     "fixpack": "fixpack",
-    "mocha": "./node_modules/.bin/mocha -R spec test/*.js",
-    "test": "npm run mocha",
-    "tsc-watch": "tsc --watch"
+    "prepack": "make clean all test",
+    "test": "make all test"
   },
   "typings": "./types/async-request-handler.d.ts"
 }
