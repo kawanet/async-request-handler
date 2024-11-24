@@ -8,8 +8,9 @@ Safe async RequestHandler to catch Promise rejection
 ## SYNOPSIS
 
 ```js
-const express = require("express");
-const {ASYNC, CATCH, IF} = require("async-request-handler");
+import express from "express";
+import {ASYNC, CATCH, IF} from "async-request-handler";
+
 const app = express();
 
 app.use(ASYNC(async (req, res, next) => { /* RequestHandler */ }));
@@ -41,7 +42,7 @@ for more detail.
 
 The MIT License (MIT)
 
-Copyright (c) 2020-2023 Yusuke Kawasaki
+Copyright (c) 2020-2024 Yusuke Kawasaki
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

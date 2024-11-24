@@ -1,12 +1,10 @@
 #!/usr/bin/env mocha -R spec
 
-import * as express from "express";
-import * as supertest from "supertest";
+import express from "express";
+import supertest from "supertest";
 import {ASYNC, CATCH, IF} from "../";
 
-const TITLE = __filename.split("/").pop();
-
-describe(TITLE, () => {
+describe("basic.test.ts", () => {
     const OK = ASYNC((req, res, next) => res.send("OK"));
 
     const ONE = ASYNC((req, res, next) => {
