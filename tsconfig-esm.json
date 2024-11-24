@@ -1,15 +1,17 @@
 {
   "include": [
-    "./lib"
+    "./lib",
+    "./test"
   ],
   "compilerOptions": {
     "module": "ES2022",
+    "moduleResolution": "Bundler",
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
-    "outDir": "esm/",
+    "outDir": "build/",
     "removeComments": false,
     "skipLibCheck": true,
     "strictNullChecks": false,
