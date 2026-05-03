@@ -42,8 +42,10 @@ function JOIN(A: RequestHandler, B: RequestHandler): RequestHandler {
 }
 
 /**
- * Returns an async RequestHandler that runs `A`; if `A` calls `next(err)`,
- * the ErrorRequestHandler `E` is invoked to handle the error.
+ * Returns an async RequestHandler that runs `A`; any failure from `A`
+ * — a synchronous throw, a rejected Promise, or an explicit `next(err)` —
+ * is routed to the ErrorRequestHandler `E`. (`A` is wrapped in SAFE so
+ * throws and rejections are normalized into `next(err)` first.)
  */
 
 function IFERROR(A: RequestHandler, E?: ErrorRequestHandler): RequestHandler {
