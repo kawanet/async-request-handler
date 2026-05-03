@@ -1,6 +1,8 @@
 # async-request-handler
 
-Safe async RequestHandler to catch Promise rejection
+Safe async middleware wrappers for Express that turn unhandled Promise rejections into ordinary `next(err)` calls.
+
+Works with Express 4 and 5.
 
 [![Node.js CI](https://github.com/kawanet/async-request-handler/workflows/Node.js%20CI/badge.svg?branch=master)](https://github.com/kawanet/async-request-handler/actions/)
 [![npm version](https://badge.fury.io/js/async-request-handler.svg)](https://www.npmjs.com/package/async-request-handler)
@@ -42,7 +44,7 @@ for more detail.
 
 The MIT License (MIT)
 
-Copyright (c) 2020-2024 Yusuke Kawasaki
+Copyright (c) 2020-2026 Yusuke Kawasaki
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
