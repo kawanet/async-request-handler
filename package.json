@@ -1,31 +1,51 @@
 {
   "name": "async-request-handler",
   "description": "Safe async RequestHandler to catch Promise rejection",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Yusuke Kawasaki <u-suke@kawa.net>",
+  "bugs": {
+    "url": "https://github.com/kawanet/async-request-handler/issues"
+  },
   "contributors": [
     "Yusuke Kawasaki <u-suke@kawa.net>"
   ],
   "devDependencies": {
-    "@types/express": "^4.17.17",
-    "@types/mocha": "^10.0.10",
-    "@types/node": "^22.9.3",
+    "@rollup/plugin-node-resolve": "^16.0.2",
+    "@rollup/plugin-sucrase": "^5.0.2",
+    "@types/express": "^4.17.21",
+    "@types/express4": "npm:@types/express@^4",
+    "@types/express5": "npm:@types/express@^5",
+    "@types/node": "^24.0.0",
     "@types/supertest": "^6.0.2",
-    "express": "^4.21.1",
-    "mocha": "^10.8.2",
+    "express4": "npm:express@^4",
+    "express5": "npm:express@^5",
+    "rollup": "^4.52.4",
     "supertest": "^7.0.0",
-    "typescript": "^5.7.2"
+    "typescript": "^5.9.3"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": ">=22",
+      "onFail": "warn"
+    }
+  },
+  "engines": {
+    "node": ">=20"
   },
   "exports": {
-    "import": "./esm/async-request-handler.mjs",
-    "require": "./lib/async-request-handler.js",
-    "types": "./types/async-request-handler.d.ts"
+    ".": {
+      "types": "./types/async-request-handler.d.ts",
+      "require": "./dist/async-request-handler.cjs",
+      "import": "./dist/async-request-handler.mjs"
+    }
   },
   "files": [
     "LICENSE",
     "README.md",
-    "esm/*.mjs",
-    "lib/*.js",
+    "dist/async-request-handler.cjs",
+    "dist/async-request-handler.mjs",
+    "lib/*.ts",
     "types/*.d.ts"
   ],
   "homepage": "https://github.com/kawanet/async-request-handler#readme",
@@ -36,17 +56,19 @@
     "promise"
   ],
   "license": "MIT",
-  "main": "./lib/async-request-handler.js",
+  "main": "./dist/async-request-handler.cjs",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kawanet/async-request-handler.git"
   },
   "scripts": {
-    "build": "make",
+    "build": "make -C builder",
     "fixpack": "fixpack",
-    "prepack": "make clean all test",
-    "test": "make all test"
+    "prepack": "if node -v | grep -q '^v20'; then echo 'ERROR: packing is not allowed on Node 20'; exit 1; fi",
+    "prepare": "if node -v | grep -q '^v20'; then :; else make -C builder clean all test; fi",
+    "test": "make -C builder test"
   },
-  "type": "commonjs",
+  "sideEffects": false,
+  "type": "module",
   "types": "./types/async-request-handler.d.ts"
 }
