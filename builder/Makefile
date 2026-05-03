@@ -8,10 +8,11 @@ CJS_DST := ../dist/async-request-handler.cjs
 MJS_CONFIG := ./rollup-mjs.config.ts
 CJS_CONFIG := ./rollup-cjs.config.ts
 
-# Bundle is small (a thin wrapper over express-intercept + sed-lite, both
-# kept external). Anything noticeably larger means an accidental bundling
-# of a Node built-in or a transitive dep — fail the build so it cannot
-# slip in.
+# Bundle is small: this package is a single source file with no
+# production dependencies. Node builtins are kept external, and
+# `express` is type-only here so it is external too. Anything
+# noticeably larger means an accidental bundling of a Node built-in
+# or of `express` itself — fail the build so it cannot slip in.
 MAX_BYTES := 5000
 
 # Every named export the package documents must survive the round trip
