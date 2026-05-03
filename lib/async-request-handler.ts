@@ -6,7 +6,10 @@ const NOP: RequestHandler = (req, res, next) => next();
 const ENOP: ErrorRequestHandler = (err, req, res, next) => next();
 
 /**
- * returns async RequestHandler which concatenates the first `handler` and more `handlers` including ErrorRequestHandler.
+ * Returns an async RequestHandler that runs `handler` first and then each
+ * of `handlers` in order. A handler with arity 4 is treated as an
+ * ErrorRequestHandler and only runs when an upstream handler errors.
+ * Any unhandled Promise rejection is forwarded to `next(err)`.
  */
 
 export function ASYNC(handler: RequestHandler, ...handlers: (RequestHandler | ErrorRequestHandler)[]): RequestHandler {
@@ -26,7 +29,9 @@ export function ASYNC(handler: RequestHandler, ...handlers: (RequestHandler | Er
 }
 
 /**
- * returns async RequestHandler which combines the pair of handlers.
+ * Returns an async RequestHandler that runs `A`, then `B` if `A` did not
+ * call `next(err)`. Both halves are wrapped in SAFE so a thrown or rejected
+ * Promise becomes a `next(err)` instead of an unhandled rejection.
  */
 
 function JOIN(A: RequestHandler, B: RequestHandler): RequestHandler {
@@ -37,7 +42,8 @@ function JOIN(A: RequestHandler, B: RequestHandler): RequestHandler {
 }
 
 /**
- * returns async RequestHandler that `E` RequestHandler catches an error thrown by `A` RequestHandler.
+ * Returns an async RequestHandler that runs `A`; if `A` calls `next(err)`,
+ * the ErrorRequestHandler `E` is invoked to handle the error.
  */
 
 function IFERROR(A: RequestHandler, E?: ErrorRequestHandler): RequestHandler {
@@ -48,7 +54,8 @@ function IFERROR(A: RequestHandler, E?: ErrorRequestHandler): RequestHandler {
 }
 
 /**
- * returns async RequestHandler which catches Promise rejection thrown from `handler`.
+ * Returns an async RequestHandler that catches Promise rejections thrown
+ * from `handler` and forwards them to `next(err)` exactly once.
  */
 
 function SAFE(handler: RequestHandler): RequestHandler {
@@ -70,7 +77,8 @@ function SAFE(handler: RequestHandler): RequestHandler {
 }
 
 /**
- * returns async ErrorRequestHandler which catches Promise rejection thrown from `handler`.
+ * Returns an async ErrorRequestHandler that catches Promise rejections
+ * thrown from `handler` and forwards them to `next(err)` exactly once.
  */
 
 export function CATCH(handler: ErrorRequestHandler): ErrorRequestHandler {
@@ -92,7 +100,9 @@ export function CATCH(handler: ErrorRequestHandler): ErrorRequestHandler {
 }
 
 /**
- * returns async ErrorRequestHandler which runs one of `THEN` or `ELSE` handlers after `COND` tester returns a boolean.
+ * Returns an async RequestHandler that dispatches to `THEN` when `COND(req)`
+ * resolves truthy, or to `ELSE` when it resolves falsy. `COND` may return
+ * a boolean or a Promise<boolean>.
  */
 
 export function IF(COND: (req: Request) => (boolean | Promise<boolean>), THEN: RequestHandler, ELSE?: RequestHandler): RequestHandler {

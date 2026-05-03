@@ -1,6 +1,6 @@
 # async-request-handler
 
-Safe async RequestHandler to catch Promise rejection.
+Safe async middleware wrappers for Express that turn unhandled Promise rejections into ordinary `next(err)` calls.
 
 Works with Express 4 and 5.
 
