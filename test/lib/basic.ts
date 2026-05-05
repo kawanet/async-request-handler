@@ -5,9 +5,12 @@ import supertest from "supertest";
 
 import {ASYNC, CATCH, IF} from "../../lib/async-request-handler.ts";
 
-// Accept the express default export by structure: v4 / v5 differ in types,
-// but the call-site shape (`express()`, `app.use(...)`) is compatible.
-export type ExpressModule = any;
+// The full Express module/namespace value: call signature + namespace
+// methods (`.static`, `.Router`, `.json`, ...). Express ships as a
+// CommonJS `export = e` namespace, so `typeof import("express")`
+// resolves to the value of `import express from "express"` directly
+// (no `.default`).
+export type ExpressModule = typeof import("express");
 
 export function runBasicTests(express: ExpressModule): void {
     describe("basic", () => {
