@@ -65,7 +65,7 @@
     "build": "make -C builder",
     "fixpack": "fixpack",
     "prepack": "make -C builder is-buildable",
-    "prepare": "make -C builder is-not-buildable || make -C builder clean all test",
+    "prepare": "make -C builder is-not-buildable 2> /dev/null || make -C builder clean all test",
     "test": "make -C builder test"
   },
   "sideEffects": false,
