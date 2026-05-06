@@ -6,6 +6,8 @@
 
 import type {ErrorRequestHandler, Request, RequestHandler} from "express";
 
+export {} // external module indicator
+
 /**
  * Returns an async `RequestHandler` that runs `handler` first and then
  * each of `handlers` in order. A handler with arity 4 is treated as an
