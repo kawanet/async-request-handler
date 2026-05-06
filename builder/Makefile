@@ -59,8 +59,6 @@ $(CJS_DST): $(CJS_CONFIG) $(SRC) $(BUILDER_SRC)
 # This ensures that the public entrypoints (exports/main) are correctly configured.
 # Note: process.argv.slice(1) is used because node -e 'code' arg1 arg2
 # results in process.argv = ['node', 'arg1', 'arg2'].
-# Depend on dist artifacts directly (not `all`) so pre-built bundles can
-# be smoke-tested on BUILDABLE=NO runtimes such as Node 20.
 smoke: $(MJS_DST) $(CJS_DST)
 	@# MJS smoke test via public entrypoint
 	cd .. && node --input-type=module -e 'const m = await import("async-request-handler"); for (const k of process.argv.slice(1)) { if (typeof m[k] !== "function") { console.error("missing MJS export:", k); process.exit(1); } console.log("MJS export OK:", k); }' $(NAMED_EXPORTS)
@@ -70,7 +68,6 @@ smoke: $(MJS_DST) $(CJS_DST)
 ####
 
 # Build, run smoke tests, and conditionally run full tests (tsc and node:test).
-# `all` already enforces is-buildable, so no Node-version guard is needed here.
 # Consumer `npm install` skips the heavy test-ts step to keep install fast.
 test: all smoke $(TYPES)
 	@ [ "$$npm_command" != "install" ] || echo "npm install detected: skipping full tests."
