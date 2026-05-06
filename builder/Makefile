@@ -56,13 +56,17 @@ $(CJS_DST): $(CJS_CONFIG) $(SRC) $(BUILDER_SRC)
 	@echo ""
 
 # Verify the bundles by importing/requiring the package itself.
-# This ensures that the public entrypoints (exports/main) are correctly configured.
-# Note: process.argv.slice(1) is used because node -e 'code' arg1 arg2
+# This ensures the public entrypoints (exports/main) are correctly configured.
+# Note: process.argv.slice(1) is used because `node -e 'code' arg1 arg2`
 # results in process.argv = ['node', 'arg1', 'arg2'].
-smoke: $(MJS_DST) $(CJS_DST)
-	@# MJS smoke test via public entrypoint
+smoke: smoke-mjs smoke-cjs
+
+# MJS smoke test via public entrypoint.
+smoke-mjs: $(MJS_DST)
 	cd .. && node --input-type=module -e 'const m = await import("async-request-handler"); for (const k of process.argv.slice(1)) { if (typeof m[k] !== "function") { console.error("missing MJS export:", k); process.exit(1); } console.log("MJS export OK:", k); }' $(NAMED_EXPORTS)
-	@# CJS smoke test via public entrypoint
+
+# CJS smoke test via public entrypoint.
+smoke-cjs: $(CJS_DST)
 	cd .. && node --input-type=commonjs -e 'const m = require("async-request-handler"); for (const k of process.argv.slice(1)) { if (typeof m[k] !== "function") { console.error("missing CJS export:", k); process.exit(1); } console.log("CJS export OK:", k); }' $(NAMED_EXPORTS)
 
 ####
@@ -80,4 +84,4 @@ test-ts:
 clean:
 	/bin/rm -fr $(ALL)
 
-.PHONY: all clean test smoke test-ts is-buildable is-not-buildable
+.PHONY: all clean test smoke smoke-mjs smoke-cjs test-ts is-buildable is-not-buildable
