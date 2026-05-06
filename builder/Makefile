@@ -22,9 +22,24 @@ NAMED_EXPORTS := ASYNC CATCH IF
 
 ALL := $(MJS_DST) $(CJS_DST)
 
+# Build/test paths require Node's native TypeScript type-strip (default on
+# Node 22.18+). Older runtimes (e.g. Node 20) report BUILDABLE=NO and can
+# still verify pre-built bundles via `make smoke`.
+BUILDABLE := $(shell node -e 'console.log(process.features.typescript ? "YES" : "NO")')
+
 ####
 
-all: $(ALL)
+all: is-buildable $(ALL)
+
+# Gate that fails loudly when type-strip is unavailable; consumed by `all`
+# and by `npm prepack` to refuse packaging on a non-buildable runtime.
+is-buildable:
+	@ [ "$(BUILDABLE)" = "YES" ] || { echo "ERROR: Node type-strip required (Node 22.18+); BUILDABLE=$(BUILDABLE)" >&2; exit 1; }
+
+# Inverse gate used by `npm prepare` to short-circuit on a non-buildable
+# runtime so consumer install on Node 20 silently skips build/test.
+is-not-buildable:
+	@ [ "$(BUILDABLE)" = "NO" ]
 
 $(MJS_DST): $(MJS_CONFIG) $(SRC) $(BUILDER_SRC)
 	@mkdir -p $(dir $@)
@@ -41,22 +56,26 @@ $(CJS_DST): $(CJS_CONFIG) $(SRC) $(BUILDER_SRC)
 	@echo ""
 
 # Verify the bundles by importing/requiring the package itself.
-# This ensures that the public entrypoints (exports/main) are correctly configured.
-# Note: process.argv.slice(1) is used because node -e 'code' arg1 arg2
+# This ensures the public entrypoints (exports/main) are correctly configured.
+# Note: process.argv.slice(1) is used because `node -e 'code' arg1 arg2`
 # results in process.argv = ['node', 'arg1', 'arg2'].
-smoke: all
-	@# MJS smoke test via public entrypoint
+smoke: smoke-mjs smoke-cjs
+
+# MJS smoke test via public entrypoint.
+smoke-mjs: $(MJS_DST)
 	cd .. && node --input-type=module -e 'const m = await import("async-request-handler"); for (const k of process.argv.slice(1)) { if (typeof m[k] !== "function") { console.error("missing MJS export:", k); process.exit(1); } console.log("MJS export OK:", k); }' $(NAMED_EXPORTS)
-	@# CJS smoke test via public entrypoint
+
+# CJS smoke test via public entrypoint.
+smoke-cjs: $(CJS_DST)
 	cd .. && node --input-type=commonjs -e 'const m = require("async-request-handler"); for (const k of process.argv.slice(1)) { if (typeof m[k] !== "function") { console.error("missing CJS export:", k); process.exit(1); } console.log("CJS export OK:", k); }' $(NAMED_EXPORTS)
 
 ####
 
 # Build, run smoke tests, and conditionally run full tests (tsc and node:test).
+# Consumer `npm install` skips the heavy test-ts step to keep install fast.
 test: all smoke $(TYPES)
-	@node -v | grep -qv "^v20" || echo "Node 20 detected: skipping full tests."
 	@ [ "$$npm_command" != "install" ] || echo "npm install detected: skipping full tests."
-	@node -v | grep -q "^v20" || [ "$$npm_command" = "install" ] || $(MAKE) test-ts
+	@ [ "$$npm_command" = "install" ] || $(MAKE) test-ts
 
 test-ts:
 	../node_modules/.bin/tsc --noEmit
@@ -65,4 +84,4 @@ test-ts:
 clean:
 	/bin/rm -fr $(ALL)
 
-.PHONY: all clean test smoke test-ts
+.PHONY: all clean test smoke smoke-mjs smoke-cjs test-ts is-buildable is-not-buildable
