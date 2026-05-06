@@ -1,11 +1,11 @@
 # async-request-handler
 
+[![Node.js CI](https://github.com/kawanet/async-request-handler/actions/workflows/nodejs.yml/badge.svg?branch=master)](https://github.com/kawanet/async-request-handler/actions/)
+[![npm version](https://img.shields.io/npm/v/async-request-handler)](https://www.npmjs.com/package/async-request-handler)
+
 Safe async middleware wrappers for Express that turn unhandled Promise rejections into ordinary `next(err)` calls.
 
 Works with Express 4 and 5.
-
-[![Node.js CI](https://github.com/kawanet/async-request-handler/actions/workflows/nodejs.yml/badge.svg?branch=master)](https://github.com/kawanet/async-request-handler/actions/)
-[![npm version](https://img.shields.io/npm/v/async-request-handler)](https://www.npmjs.com/package/async-request-handler)
 
 ## SYNOPSIS
 
