@@ -2,7 +2,6 @@
 
 import express5 from "express5"
 import {describe} from "node:test"
-
 import {runBasicTests, type ExpressModule} from "./lib/basic.ts"
 
 // Runtime tests cover both Express 4 and 5. Type-level dual coverage

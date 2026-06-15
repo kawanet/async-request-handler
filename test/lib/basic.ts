@@ -2,7 +2,6 @@
 
 import {describe, it} from "node:test"
 import supertest from "supertest"
-
 import {ASYNC, CATCH, IF} from "../../lib/async-request-handler.ts"
 
 // The full Express module/namespace value: call signature + namespace
