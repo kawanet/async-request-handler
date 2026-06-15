@@ -1,7 +1,7 @@
 // Test entry for the Express 5 line.
 
-import {describe} from "node:test"
 import express5 from "express5"
+import {describe} from "node:test"
 
 import {runBasicTests, type ExpressModule} from "./lib/basic.ts"
 
