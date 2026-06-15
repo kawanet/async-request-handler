@@ -4,7 +4,7 @@
  * @see https://www.npmjs.com/package/async-request-handler
  */
 
-import type {ErrorRequestHandler, Request, RequestHandler} from "express";
+import type {ErrorRequestHandler, Request, RequestHandler} from "express"
 
 export {} // external module indicator
 
@@ -18,7 +18,7 @@ export {} // external module indicator
  * @param handler  Initial RequestHandler.
  * @param handlers Additional RequestHandler / ErrorRequestHandler instances chained after `handler`.
  */
-export declare function ASYNC(handler: RequestHandler, ...handlers: (RequestHandler | ErrorRequestHandler)[]): RequestHandler;
+export declare function ASYNC(handler: RequestHandler, ...handlers: (RequestHandler | ErrorRequestHandler)[]): RequestHandler
 
 /**
  * Returns an async `ErrorRequestHandler` that catches Promise rejections
@@ -26,7 +26,7 @@ export declare function ASYNC(handler: RequestHandler, ...handlers: (RequestHand
  *
  * @param handler ErrorRequestHandler that may return a rejected Promise.
  */
-export declare function CATCH(handler: ErrorRequestHandler): ErrorRequestHandler;
+export declare function CATCH(handler: ErrorRequestHandler): ErrorRequestHandler
 
 /**
  * Returns an async `RequestHandler` that dispatches to `THEN` when `COND(req)`
@@ -37,4 +37,4 @@ export declare function CATCH(handler: ErrorRequestHandler): ErrorRequestHandler
  * @param THEN RequestHandler invoked when `COND` is truthy.
  * @param ELSE Optional RequestHandler invoked when `COND` is falsy. Defaults to a no-op.
  */
-export declare function IF(COND: (req: Request) => (boolean | Promise<boolean>), THEN: RequestHandler, ELSE?: RequestHandler): RequestHandler;
+export declare function IF(COND: (req: Request) => (boolean | Promise<boolean>), THEN: RequestHandler, ELSE?: RequestHandler): RequestHandler

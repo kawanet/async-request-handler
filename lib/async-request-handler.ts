@@ -1,9 +1,9 @@
 // async-handler.ts
 
-import type {ErrorRequestHandler, Request, RequestHandler} from "express";
+import type {ErrorRequestHandler, Request, RequestHandler} from "express"
 
-const NOP: RequestHandler = (req, res, next) => next();
-const ENOP: ErrorRequestHandler = (err, req, res, next) => next();
+const NOP: RequestHandler = (req, res, next) => next()
+const ENOP: ErrorRequestHandler = (err, req, res, next) => next()
 
 /**
  * Returns an async RequestHandler that runs `handler` first and then each
@@ -14,18 +14,18 @@ const ENOP: ErrorRequestHandler = (err, req, res, next) => next();
 
 export function ASYNC(handler: RequestHandler, ...handlers: (RequestHandler | ErrorRequestHandler)[]): RequestHandler {
     for (const mw of handlers) {
-        const args = ("function" === typeof mw) && +mw.length;
+        const args = ("function" === typeof mw) && +mw.length
 
         if (mw && args < 4) {
-            handler = JOIN(handler, mw as RequestHandler);
+            handler = JOIN(handler, mw as RequestHandler)
         } else if (args === 4) {
-            handler = IFERROR(handler, mw as ErrorRequestHandler);
+            handler = IFERROR(handler, mw as ErrorRequestHandler)
         } else if (mw != null) {
-            throw new TypeError("not a standard handler: " + mw);
+            throw new TypeError("not a standard handler: " + mw)
         }
     }
 
-    return SAFE(handler);
+    return SAFE(handler)
 }
 
 /**
@@ -35,10 +35,10 @@ export function ASYNC(handler: RequestHandler, ...handlers: (RequestHandler | Er
  */
 
 function JOIN(A: RequestHandler, B: RequestHandler): RequestHandler {
-    A = SAFE(A);
-    B = SAFE(B);
+    A = SAFE(A)
+    B = SAFE(B)
 
-    return (req, res, next) => A(req, res, (err?: any) => (err ? (next && next(err)) : B(req, res, next)));
+    return (req, res, next) => A(req, res, (err?: any) => (err ? (next && next(err)) : B(req, res, next)))
 }
 
 /**
@@ -49,10 +49,10 @@ function JOIN(A: RequestHandler, B: RequestHandler): RequestHandler {
  */
 
 function IFERROR(A: RequestHandler, E?: ErrorRequestHandler): RequestHandler {
-    A = SAFE(A);
-    E = CATCH(E);
+    A = SAFE(A)
+    E = CATCH(E)
 
-    return (req, res, next) => A(req, res, (err?: any) => (err ? E(err, req, res, next) : (next && next())));
+    return (req, res, next) => A(req, res, (err?: any) => (err ? E(err, req, res, next) : (next && next())))
 }
 
 /**
@@ -61,21 +61,21 @@ function IFERROR(A: RequestHandler, E?: ErrorRequestHandler): RequestHandler {
  */
 
 function SAFE(handler: RequestHandler): RequestHandler {
-    if (!handler) handler = NOP;
+    if (!handler) handler = NOP
 
     return async (req, res, next) => {
         try {
-            return await handler(req, res, _next);
+            return await handler(req, res, _next)
         } catch (e) {
-            if (_next) return _next(e);
+            if (_next) return _next(e)
         }
 
         function _next(e?: any) {
-            const fn = next;
-            next = null;
-            if (fn) return fn(e);
+            const fn = next
+            next = null
+            if (fn) return fn(e)
         }
-    };
+    }
 }
 
 /**
@@ -84,21 +84,21 @@ function SAFE(handler: RequestHandler): RequestHandler {
  */
 
 export function CATCH(handler: ErrorRequestHandler): ErrorRequestHandler {
-    if (!handler) handler = ENOP;
+    if (!handler) handler = ENOP
 
     return async (err, req, res, next) => {
         try {
-            return await handler(err, req, res, _next);
+            return await handler(err, req, res, _next)
         } catch (e) {
-            if (_next) return _next(e || err);
+            if (_next) return _next(e || err)
         }
 
         function _next(e?: any) {
-            const fn = next;
-            next = null;
-            if (fn) return fn(e);
+            const fn = next
+            next = null
+            if (fn) return fn(e)
         }
-    };
+    }
 }
 
 /**
@@ -108,10 +108,10 @@ export function CATCH(handler: ErrorRequestHandler): ErrorRequestHandler {
  */
 
 export function IF(COND: (req: Request) => (boolean | Promise<boolean>), THEN: RequestHandler, ELSE?: RequestHandler): RequestHandler {
-    if (!THEN) THEN = NOP;
-    if (!ELSE) ELSE = NOP;
+    if (!THEN) THEN = NOP
+    if (!ELSE) ELSE = NOP
 
     return (req, res, next) => Promise.resolve()
         .then(() => COND(req))
-        .then(result => result ? THEN(req, res, next) : ELSE(req, res, next));
+        .then(result => result ? THEN(req, res, next) : ELSE(req, res, next))
 }
