@@ -1,6 +1,6 @@
 # async-request-handler
 
-[![Node.js CI](https://github.com/kawanet/async-request-handler/actions/workflows/nodejs.yml/badge.svg?branch=master)](https://github.com/kawanet/async-request-handler/actions/)
+[![Node.js CI](https://github.com/kawanet/async-request-handler/actions/workflows/nodejs.yml/badge.svg?branch=main)](https://github.com/kawanet/async-request-handler/actions/)
 [![npm version](https://img.shields.io/npm/v/async-request-handler)](https://www.npmjs.com/package/async-request-handler)
 
 Safe async middleware wrappers for Express that turn unhandled Promise rejections into ordinary `next(err)` calls.
@@ -32,7 +32,7 @@ app.use(IF(
 ```
 
 See TypeScript declaration
-[async-request-handler.d.ts](https://github.com/kawanet/async-request-handler/blob/master/types/async-request-handler.d.ts)
+[async-request-handler.d.ts](https://github.com/kawanet/async-request-handler/blob/main/types/async-request-handler.d.ts)
 for more detail.
 
 ## SEE ALSO
